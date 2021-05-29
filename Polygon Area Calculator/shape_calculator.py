@@ -32,12 +32,14 @@ class Rectangle:
             return j
     
     def get_amount_inside(self, Rectangle):
+
+        # Find how many can I fit diagonally and horizontally
         x = (self.width/Rectangle.width)//1
         y = (self.height/Rectangle.height)//1
 
         return int(x * y)
         
-        # Find how many can I fit diagonally and horizontally, then take the smaller number
+        
 
 class Square(Rectangle):
 

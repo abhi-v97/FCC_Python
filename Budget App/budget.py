@@ -40,9 +40,9 @@ class Category:
         x = '{:*^30}'.format(self.name) + "\n"
 
         for i in self.ledger:
-          x += i["description"][:23].ljust(23) + \
-                                           str("{:.2f}".format(
-                                               i["amount"]).rjust(7)) + "\n"
+            x += i["description"][:23].ljust(23) + \
+                str("{:.2f}".format(
+                    i["amount"]).rjust(7)) + "\n"
 
         x += "Total: " + str(self.balance)
 
@@ -50,50 +50,45 @@ class Category:
 
 
 def create_spend_chart(categories):
-    line1 = "Percentage spent by category"
+    line1 = "'''" + "\n" + "Percentage spent by category"
     print(line1)
     names = []
     expenses = []
     percentage = []
 
-
+    # iterate through categories, add to names list
     for i in categories:
         names.append(i.name)
-        
+
         part = 0
         for j in i.ledger:
             if j["amount"] < 0:
                 part += j["amount"]
         expenses.append(round(part, 2))
 
-    
     for i in range(len(expenses)):
         percentage.append(expenses[i] / sum(expenses) * 100)
     print(percentage)
-        
 
     i = 100
     row = ""
     maxlen = max(len(x.name) for x in categories)
-    
 
     for i in range(100, -10, -10):
-
+        # this creates the rows for each percentage 
         row += str(i).rjust(3) + "|"
-        
 
-        for j in percentage: # credit zaneaw
-            
+        # add an "o" if percentage is greater than i
+        for j in percentage:  # credit zaneaw
             if j >= i:
                 row += " o "
             else:
                 row += "   "
-        
         row += " \n"
-    
+
+    #this creates the delineator between the names and the chart
     row += "    " + "-" * len(names) * 3 + "-" + "\n"
-    
-    
+
     for i in range(maxlen):
         row += "    "
 
@@ -102,11 +97,32 @@ def create_spend_chart(categories):
                 row += " " + j.name[i] + " "
             else:
                 row += "   "
-    
-        row += " \n"
-  
-    chart = row.rstrip() + "  "
 
-    y = line1 + "\n" + chart
+        row += " \n"
+
+    # strip white space, add two more spaces because the test module is petty
+    chart = row.rstrip() + "  "
+    y = line1 + "\n" + chart + "\n" + "'''"
+
+    #print(y)
 
     return y
+
+
+if __name__ == "__main__":
+    food = Category("Food")
+    entertainment = Category("Entertainment")
+    business = Category("Business")
+
+    food.deposit(900, "deposit")
+    entertainment.deposit(900, "deposit")
+    business.deposit(900, "deposit")
+    food.withdraw(105.55)
+    entertainment.withdraw(33.40)
+    business.withdraw(10.99)
+
+    print(food)
+    print(entertainment)
+    print(business)
+
+    print(create_spend_chart([business, food, entertainment]))
